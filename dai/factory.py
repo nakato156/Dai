@@ -25,7 +25,6 @@ class Factory(Server):
         
         networks_weights = list([w.weights for w in self.workers.values()])
         average_weights = []
-        print([[np.array(p).shape for p in w] for w in networks_weights])
         for layer_idx in range(len(networks_weights[0])):
             layer_weights = [np.array(network[layer_idx]) for network in networks_weights]
                         
