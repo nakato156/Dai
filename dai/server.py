@@ -1,11 +1,6 @@
-from typing import Tuple
 import asyncio
-import json
-
-RESET = "\033[0m"
-RED = "\033[91m"
-YELLOW = "\033[93m"
-GREEN = "\033[92m"
+import pickle
+from .definitions import GREEN, RESET
 
 class Server:
     def __init__(self, host, port):
@@ -16,17 +11,18 @@ class Server:
         buffer = b""
         while True:
             res = await reader.read(1024)
+            # print("res: ", res)
             if not res:
                 break
             buffer += res
             try:
-                data = json.loads(buffer.decode())
+                data = pickle.loads(buffer)
                 return data
-            except json.JSONDecodeError:
+            except pickle.UnpicklingError:
                 continue
     
     async def send_data(self, data:dict, writer: asyncio.StreamWriter):
-        writer.write(json.dumps(data).encode())
+        writer.write(pickle.dumps(data))
         await writer.drain()
         
     async def run(self, callback_client):
