@@ -3,3 +3,5 @@ env/
 test/
 test.ps1
 client.py
+dist/
+*.egg-info
